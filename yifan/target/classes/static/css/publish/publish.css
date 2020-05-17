@@ -1,0 +1,9 @@
+#publish{
+    padding-bottom: 100px;
+}
+
+.input-error{
+    color: red;
+    display: inline-block;
+    font-size: 18px;
+}

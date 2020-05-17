@@ -1,0 +1,14 @@
+
+body{margin: 0px;padding: 0px; background: #36fb26;}
+
+/*=================>>>>>>>> info page*/
+.info-right-label{
+    font-size: 20px;
+    color: red;
+    margin: 0;
+}
+.info-right-sameBlog{
+    background: #fff;
+    border-radius: 5px;
+    padding: 5px 15px;
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/login/bootstrap.min.css">
+    <title>发布成功</title>
+    <script src="/js/jquery-3.2.1.min.js"></script>
+</head>
+<body>
+
+
+<div style="margin-top:10%">
+
+    <img src="/images/ok.jpg" class="center-block text-center">
+
+    <h1 class="text-center" th:text="${okmsg}"></h1>
+    <br/>
+
+    <h4 class="text-center ">
+        您已发布成功,
+        <span class="distime" style="color:red;">3 </span> 秒后返回首页
+        <button type="button" class="btn btn-success">点击回主页</button>
+    </h4>
+
+</div>
+
+<script>
+    var num = $(".distime").text();
+    var t = setInterval(function () {
+        $(".distime").text(--num);
+        if(num == 0){
+            clearInterval(t);
+            window.location.href ="/admin/index";
+        }
+
+    },1000);
+    $(".btn").click(function () {
+        clearInterval(t);
+        window.location.href ="/admin/index";
+    })
+
+</script>
+
+</body>
+</html>

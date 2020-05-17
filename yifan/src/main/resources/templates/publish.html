@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.thymeleaf.org/thymeleaf-extras-shiro">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/login/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/markdown/css/editormd.min.css">
+    <link rel="stylesheet" type="text/css" href="/markdown/css/editormd.preview.css">
+    <link rel="stylesheet" type="text/css" href="/css/publish/publish.css">
+    <link rel="stylesheet" type="text/css" href="/css/nav.css">
+    <title>发布</title>
+</head>
+<body>
+
+<div th:insert="~{navs :: navele}" style="margin-bottom: 100px"></div>
+
+
+<div class="container" id="publish">
+    <form action="/publish/addBlog" method="post">
+        <div class="row">
+            <div class="row">
+                <div class="col-md-9 col-sm-12">
+
+                    <div class="form-group">
+                        <label>文章标题（简单扼要）:</label>
+                        <input autocomplete="off" type="text" id="blogTitle" class="form-control" name="blogTitle"
+                               placeholder="文章标题...">
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-12">
+                    <!-- Large button group -->
+                    <div class="form-group dropdown" >
+                        <label>文章类型:</label>
+                        <select  class="form-control" name="blogType" id="blogType" onclick="changType(this)">
+                            <option value="1" shiro:hasPermission="user:publish" th:onshow="">博客文章</option>
+                            <option value="2">我们故事</option>
+                            <!-- 数据库 对应 -->
+                        </select>
+                    </div>
+                    <br/>
+                </div>
+            </div>
+            <br/>
+
+            <div class="form-group">
+                <label>文章描述:(原由...)</label>
+                <textarea name="blogDesc" class="form-control" id="blogDesc" cols="30"></textarea>
+            </div>
+            <br/>
+
+
+            <div class="form-group" shiro:hasPermission="user:our">
+                <label>文章封面</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="updateFileimg" name="updateFileimg" placeholder="Select file...">
+                    <label class="input-group-btn">
+                        <span class="btn btn-primary">
+                            Browse… <input type="file" id="fileImg" style="display: none;" multiple>
+                        </span>
+                    </label>
+                </div>
+            </div>
+            <br/>
+
+
+            <div class="form-group" >
+                <label>文章内容 (必填...):</label>
+                <div id="test-editor" style="z-index: 99">
+                    <textarea style="display:none;" class="form-control" name="blogContent"  id="blogContent">### 关于 Editor.md</textarea>
+                </div>
+            </div>
+
+            <!-- 有这个 user:publish 权限 就可以显示  -->
+            <div class="form-group" shiro:hasPermission="user:publish">
+                <label>添加标签:</label>
+                <input autocomplete="off" type="text" class="form-control" id="tag" name="tag"
+                       placeholder="输入标签以 , 隔开">
+            </div>
+
+            <!--标签-->
+            <div class="selectTags" style="display: none">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" th:each="itag :${tags}">
+                        <a th:href="${'#'+itag.url}" aria-controls="home" role="tab" data-toggle="tab" th:text="${itag.categoryTag}"></a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane" th:id="${tagCon.url}" th:each="tagCon : ${tags}">
+                        <br/>
+                        <span class="label label-success" style="margin-right: 5px" onclick="selectTag(this)" th:data-tag="${selectTag}" th:each="selectTag:${tagCon.stringListTag}">
+                            <span th:text="${selectTag}"></span>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+            <br/>
+            <br/> <br/>
+
+
+
+            <!--错误提示-->
+            <p style="display: inline-block;" th:if="${ error != null}">
+                <span  th:text="${error}" class="input-error"></span>
+                <!--<input type="hidden  th:value="${error}" class="input-error">-->
+                <!--<span class="glyphicon glyphicon-exclamation-sign TipError"></span>-->
+                <!--<span class="TipError" th:text="${error}"></span>-->
+            </p>
+
+            <button autocomplete="off" type="submit" id="submitBtn" class="btn btn-success pull-right">
+                发 布 文 章
+            </button>
+
+
+        </div>
+    </form>
+</div>
+
+
+
+
+<script src="/js/jquery-3.2.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/markdown/editormd.min.js"></script>
+<script src="/markdown/lib/marked.min.js"></script>
+<script src="/markdown/lib/prettify.min.js"></script>
+
+<script src="/js/publish/publish.js"></script>
+
+
+<script type="text/javascript">
+
+
+    $(function () {
+        $("#updateFileimg").click(function () {
+            $("#fileImg").trigger("click");
+        });
+        $("#fileImg").change(function(){
+
+            // document.getElementById('fileImg').value  全路径
+            // document.getElementById("fileImg").files[0].name  图片名称
+            //获取FileUpload对象
+             var x = document.getElementById('fileImg').value;
+             console.log(x);
+            //把获得的文件名放入text里面显示
+            $("#updateFileimg").val(x);
+        })
+    })
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/login/bootstrap.min.css">
+    <title>聊天</title>
+</head>
+<body>
+
+<div class="container">
+    <br/>
+    <div class="form-group text-center row ">
+        <div class="col-sm-12 col-md-6 col-md-offset-3">
+
+            <h3 class="text-center h3">
+                <span>当前用户</span>
+                <span class="uname"  th:text="${session.user.uName}"></span>
+            </h3>
+            <span th:text="${lineUser}"></span>
+            <h4 style="color: red"  class="text-center h4" th:if=" !${nouser}">
+                在线用户 :
+                <span th:each="item : ${touser}">
+                      <span  th:text="${item.getUName()}"></span> ,
+                </span>
+            </h4>
+            <h4 style="color: red" class="text-center h4" th:if=" ${nouser} ">当前暂无在线用户...</h4>
+            <br/>
+
+
+            <div class="row ">
+                <div class="col-sm-12 col-md-12 text-center">
+                    <table class="table table-striped " >
+                        <tr>
+                            <th class="text-center">聊天</th>
+                        </tr>
+                        <tr id="msg">
+                            <th></th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="form-horizontal">
+                <div class="form-group ">
+                    <label class="col-sm-12 col-md-2 control-label"> 内容:</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="con">
+                    </div>
+                </div>
+
+
+                <div class="form-group ">
+                    <label class="col-sm-12 col-md-2 control-label"> 发送给:</label>
+                    <div class="col-sm-10">
+                        <select  class="form-control touser">
+                            <option th:each=" item : ${touser}" th:value="${item.uName}" th:text="${item.uName}"></option>
+                            <!-- 数据库 对应 -->
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 text-right">
+                    <button id="all" class="btn btn-info">发送所有人</button>
+                    <button id="one" class="btn btn-danger">发送个人</button>
+                    <button id="disconnect" class="btn btn-default" type="submit">断开连接</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+</div>
+
+
+
+
+<script src="/js/jquery-3.2.1.min.js"></script>
+<script src="/js/chat/sockjs.min.js"></script>
+<script src="/js/chat/stomp.js"></script>
+
+<style>
+    #msg{
+        font-size: 14px;
+        font-weight: bold;
+    }
+    .user{
+        display: inline-block;
+        color: #0a5bd9;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        border-radius: 50%;
+        border: 1px #0a001f solid;
+    }
+</style>
+<script>
+
+    var name ='';
+    // 连接
+    var socket = new SockJS("http://localhost:8081/socket");
+    // console.log(socket);
+    stompClient = Stomp.over(socket);
+    stompClient.connect( {}, function (frame) {
+
+        // 广播
+        stompClient.subscribe('/topic/message', function (res) {
+            // showGreeting(JSON.parse(data.body).content);
+            console.log("res => "+res);
+            $("#msg").before("<tr class='allmsg text-center' ><td> "+"<span class='user'>"+JSON.parse(res.body).name +"</span>" + "<span style='color: red'> (全体消息) : </span>" +  JSON.parse(res.body).message  +  " </td></tr>");
+        });
+
+        // 个人  == > 接收的消息 (订阅自己)
+        name = $(".uname").text();
+        stompClient.subscribe('/user/'+name+'/ptp', function (res) {
+            console.log(name);
+            // showGreeting(JSON.parse(data.body).content);
+            console.log("res => "+res);
+            $("#msg").before( "<tr class='tomsg text-left'> <td>"+ " <span class='user text-center'>" + JSON.parse(res.body).name + "</span> : " +  JSON.parse(res.body).message +"  </td></tr>");
+        });
+
+
+    },function (error) {
+        console.log('连接失败【' + error + '】');
+    });
+
+    // 断开连接
+    $("#disconnect").click(function () {
+        if (stompClient !== null) {
+            stompClient.disconnect();
+            alert('用户: '+name+'   ...断开连接...');
+            $("#msg").html("");
+        }
+    });
+
+    // 单个发送
+    $("#one").click(function () {
+        console.log("点击了/....")
+        var info = {};
+        info.toname = $(".touser").val();
+        info.name = name;
+        info.message = $("#con").val();
+        info.date = "1212";
+        if(info.toname != info.name){
+            $("#msg").before( "<tr class='tomsg text-right'> <td>"+ info.message + " : <span class='user text-center'> " + info.name + "</span>" +" </td></tr>");
+
+            stompClient.send("/yifan/chatTo", {}, JSON.stringify(info) );
+        }else {
+            alert("不能给自己发送消息~")
+        }
+        clearText();
+
+    });
+
+    // 群发
+    $("#all").click(function () {
+        var info = {};
+        info.toname = $(".touser").val();
+        info.name = name;
+        info.message = $("#con").val();
+        info.date = "1212";
+        stompClient.send("/yifan/chat", {}, JSON.stringify(info) );
+        clearText();
+    });
+
+    function clearText(){
+        $(".touser").val("");
+        $("#con").val("");
+    }
+
+    //窗口关闭时，关闭连接
+    window.onbeforeunload=function() {
+        socket.close();
+
+    };
+
+
+</script>
+
+</body>
+</html>

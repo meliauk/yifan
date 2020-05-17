@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/login/bootstrap.min.css">
+    <title>Title</title>
+</head>
+<style>
+    .calltop{
+        list-style: none;
+        font-size: 24px;
+    }
+    a{
+        color: #0a001f;
+    }
+    a:hover{
+        text-decoration: none;
+        color: #919191;
+    }
+
+</style>
+<body>
+<div class="container">
+    <h4 class="h4 text-center" style="margin-top: 50px">文章信息</h4>
+    <table class="table table-hover">
+        <tr>
+            <th>编号</th>
+            <th>标题</th>
+            <th>描述</th>
+            <th>时间</th>
+            <th>类型</th>
+            <th>喜欢</th>
+        </tr>
+        <tr th:each="blog,index : ${blogPage.getRecords()}">
+            <td th:text="${index.count}"></td>
+            <td th:text="${blog.getBlogTitle()}"></td>
+            <td th:text="${blog.getBlogDesc()}"></td>
+            <td th:text="${blog.blogTime}"></td>
+            <td th:text="${blog.getBlogPublishType()}"></td>
+            <td th:text="${blog.getBlogLike()}"></td>
+        </tr>
+    </table>
+
+    <nav aria-label="...">
+        <ul class="pager">
+            <li class="previous"><a th:href="@{/admin/BlogTab(type=${type},current=${blogPage.current - 1},size=2)}"><span aria-hidden="true">&larr;</span> 上一页</a></li>
+
+            <li class="text-center"><span th:text="${blogPage.current}"></span></li>
+
+            <li class="next"><a th:if=" ${blogPage.current} <= ${blogPage.pages}" th:href="@{/admin/BlogTab(type=${type},current=${blogPage.current+1},size=2)}">下一页 <span aria-hidden="true">&rarr;</span></a></li>
+        </ul>
+    </nav>
+
+    <div class="call" style="position: fixed ;right: 100px;bottom: 100px;">
+        <ul class="pull-right calltop">
+            <li><a href="/admin/index">首页</a></li>
+        </ul>
+    </div>
+
+</div>
+
+
+
+
+<script src="/js/jquery-3.2.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script>
+  /*  $.ajax({
+        type: "get",
+        url: "/publish/BlogTab/"+e,
+        dataType: "json",
+        success: function (data) {
+            console.log("info => "+data)
+
+        },
+        error: function (e) {
+            alert("查询失败...")
+            console.log(e)
+        }
+    })*/
+
+  /* 回首页 */
+ /* $(function () {
+      $(window).scroll(function () {
+          if($(window).scrollTop() > 300){
+              $(".call").css("display","inline-block")
+          }else {
+              $(".call").css("display","none")
+          }
+      })
+  })*/
+
+</script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/login/bootstrap.min.css">
+    <title>广告</title>
+</head>
+<style>
+    .calltop{
+        list-style: none;
+        font-size: 24px;
+    }
+    a{
+        color: #0a001f;
+    }
+    a:hover{
+        text-decoration: none;
+        color: #919191;
+    }
+</style>
+<body>
+
+<div class="container">
+    <br/>
+    <div class="row">
+        <h4 class="h4 text-center">添加广告</h4>
+        <br/>
+        <form class="form-horizontal" method="post" action="/publish/addAd">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">标题</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="adTitle" placeholder="标题">
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-2 control-label">链接</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="adUrl" placeholder="链接">
+                </div>
+            </div>
+
+        <!--    <div class="form-group">
+                <label  class="col-sm-2 control-label">图片</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="adUrl" placeholder="图片">
+                </div>
+            </div>
+-->
+            <div class="form-group">
+                <label class="col-sm-2 control-label">开始时间</label>
+                <div class="col-sm-10">
+                    <input type="datetime-local" class="form-control" name="adGmtStart" placeholder="开始时间">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">结束时间</label>
+                <div class="col-sm-10">
+                    <input type="datetime-local" class="form-control" name="adGmtEnd" placeholder="结束时间">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">位置</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="adPos" placeholder="位置">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-default">提交</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="call" style="position: fixed ;right: 100px;bottom: 100px;">
+            <ul class="pull-right calltop">
+                <li><a href="/admin/index">首页</a></li>
+            </ul>
+        </div>
+
+
+    </div>
+</div>
+
+</body>
+</html>

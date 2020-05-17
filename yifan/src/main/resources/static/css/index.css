@@ -1,0 +1,22 @@
+body{
+    background:url('/images/bg.jpg') 100%  center;
+}
+.divCount{
+    display: inline-block;
+    text-align: center;
+    height: 100px;
+    width: 100%;
+    line-height: 100px;
+    border-radius: 10px;
+    color: black;
+    margin-bottom: 50px;
+}
+.divCount:hover{
+    text-decoration: none;
+    color: black;
+}
+.count{
+    padding-left: 5px;
+    color: #fff;
+    font-size:16px ;
+}

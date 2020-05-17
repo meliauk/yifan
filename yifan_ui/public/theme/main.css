@@ -1,0 +1,16 @@
+*{
+    list-style: none;
+    text-decoration: none;
+}
+/*=================>>>>>>>> info page*/
+.info-right-label{
+    font-size: 20px;
+    color: #2C7EEA;
+    font-weight: bold;
+    margin: 0;
+}
+.info-right-sameBlog{
+    background: #fff;
+    border-radius: 5px;
+    padding: 5px 15px;
+}
